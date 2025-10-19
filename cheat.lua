@@ -12,16 +12,30 @@ end
 -- Fonction pour verifier la cle
 local function checkKey(key)
     local hwid = getHWID()
+    local HttpService = game:GetService("HttpService")
+    
     local success, response = pcall(function()
-        return game:HttpPost(apiUrl .. "/api/check-key", game:GetService("HttpService"):JSONEncode({
-            key = key,
-            hwid = hwid
-        }), Enum.HttpContentType.ApplicationJson)
+        return request({
+            Url = apiUrl .. "/api/check-key",
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = HttpService:JSONEncode({
+                key = key,
+                hwid = hwid
+            })
+        })
     end)
     
-    if success then
-        local data = game:GetService("HttpService"):JSONDecode(response)
-        return data.success, data.message or data.error
+    if success and response then
+        if response.StatusCode == 200 then
+            local data = HttpService:JSONDecode(response.Body)
+            return data.success, data.message or data.error
+        else
+            local data = HttpService:JSONDecode(response.Body)
+            return false, data.error or "Erreur serveur"
+        end
     else
         return false, "Erreur de connexion a l'API"
     end
@@ -183,6 +197,20 @@ SettingsSection:AddButton({
         OrionLib:Destroy()
     end
 })
+
+-- Test de connexion API au demarrage
+spawn(function()
+    wait(2)
+    local testSuccess, testMessage = checkKey("TEST123")
+    if not testSuccess and testMessage == "Erreur de connexion a l'API" then
+        OrionLib:MakeNotification({
+            Name = "Avertissement",
+            Content = "Impossible de contacter l'API. Verifiez votre connexion.",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
+    end
+end)
 
 OrionLib:Init()
 
