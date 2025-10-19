@@ -58,8 +58,8 @@ local KeyWindow = OrionLib:MakeWindow({
 })
 
 OrionLib:MakeNotification({
-    Name = "Bienvenue sur Luxen!",
-    Content = "Entrez votre cle pour continuer",
+    Name = "Welcome on Luxen!",
+    Content = "Please enter ur key",
     Image = "rbxassetid://4483345998",
     Time = 5
 })
@@ -72,11 +72,11 @@ local KeyTab = KeyWindow:MakeTab({
 })
 
 local KeySection = KeyTab:AddSection({
-    Name = "Authentification"
+    Name = "Auth"
 })
 
 KeySection:AddTextbox({
-    Name = "Entrez votre cle",
+    Name = "Enter ur key",
     Default = "",
     TextDisappear = true,
     Callback = function(Value)
@@ -85,12 +85,12 @@ KeySection:AddTextbox({
 })
 
 KeySection:AddButton({
-    Name = "Valider la cle",
+    Name = "Check",
     Callback = function()
         if keyInput == "" then
             OrionLib:MakeNotification({
-                Name = "Erreur!",
-                Content = "Veuillez entrer une cle",
+                Name = "Error !",
+                Content = "Please enter a key",
                 Image = "rbxassetid://4483345998",
                 Time = 3
             })
@@ -98,8 +98,8 @@ KeySection:AddButton({
         end
         
         OrionLib:MakeNotification({
-            Name = "Verification...",
-            Content = "Verification de la cle en cours...",
+            Name = "Checking...",
+            Content = "Checking the key...",
             Image = "rbxassetid://4483345998",
             Time = 2
         })
@@ -109,8 +109,8 @@ KeySection:AddButton({
         if success then
             keyEntered = true
             OrionLib:MakeNotification({
-                Name = "Succes!",
-                Content = "Cle valide! Chargement de Luxen...",
+                Name = "Succes !",
+                Content = "Key is valid ! Luxen is loading...",
                 Image = "rbxassetid://4483345998",
                 Time = 3
             })
@@ -121,7 +121,7 @@ KeySection:AddButton({
             loadMainMenu()
         else
             OrionLib:MakeNotification({
-                Name = "Erreur!",
+                Name = "Error !",
                 Content = message,
                 Image = "rbxassetid://4483345998",
                 Time = 5
@@ -130,43 +130,43 @@ KeySection:AddButton({
     end
 })
 
-KeySection:AddParagraph("Informations", "Entrez votre cle pour acceder au menu Luxen")
+--KeySection:AddParagraph("Information", "Enter a key for ")
 
 -- Onglet Obtenir une cle
 local GetKeyTab = KeyWindow:MakeTab({
-    Name = "Obtenir une cle",
+    Name = "Get a key",
     Icon = "rbxassetid://4483345998",
     PremiumOnly = false
 })
 
 local GetKeySection = GetKeyTab:AddSection({
-    Name = "Comment obtenir une cle"
+    Name = "How to get a key"
 })
 
-GetKeySection:AddParagraph("Discord", "Rejoins notre Discord pour obtenir une cle gratuite!")
+GetKeySection:AddParagraph("Discord", "Join our discord")
 
 GetKeySection:AddButton({
-    Name = "Copier le Discord",
+    Name = "Copy Discord",
     Callback = function()
         setclipboard("discord.gg/luxen")
         OrionLib:MakeNotification({
-            Name = "Copie!",
-            Content = "Lien Discord copie dans le presse-papier",
+            Name = "Copied !",
+            Content = "The link is copied",
             Image = "rbxassetid://4483345998",
             Time = 3
         })
     end
 })
 
-GetKeySection:AddParagraph("HWID", "Votre HWID: " .. getHWID())
+GetKeySection:AddParagraph("HWID", "Your HWID: " .. getHWID())
 
 GetKeySection:AddButton({
-    Name = "Copier le HWID",
+    Name = "Copy HWID",
     Callback = function()
         setclipboard(getHWID())
         OrionLib:MakeNotification({
-            Name = "Copie!",
-            Content = "HWID copie dans le presse-papier",
+            Name = "Copied !",
+            Content = "The HWID is copied",
             Image = "rbxassetid://4483345998",
             Time = 3
         })
@@ -175,7 +175,7 @@ GetKeySection:AddButton({
 
 -- Onglet Parametres
 local SettingsTab = KeyWindow:MakeTab({
-    Name = "Parametres",
+    Name = "Settings",
     Icon = "rbxassetid://4483345998",
     PremiumOnly = false
 })
@@ -185,11 +185,11 @@ local SettingsSection = SettingsTab:AddSection({
 })
 
 SettingsSection:AddButton({
-    Name = "Fermer le Key System",
+    Name = "Close",
     Callback = function()
         OrionLib:MakeNotification({
-            Name = "Au revoir!",
-            Content = "Luxen Key System ferme...",
+            Name = "Bye bye",
+            Content = "Luxen closing...",
             Image = "rbxassetid://4483345998",
             Time = 2
         })
