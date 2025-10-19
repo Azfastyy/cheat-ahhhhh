@@ -1,33 +1,33 @@
-– Luxen - Emergency Hamburg Menu
-– Utilise Rayfield Interface Suite
+-- Luxen - Emergency Hamburg Menu
+-- Utilise Rayfield Interface Suite
 
-local Rayfield = loadstring(game:HttpGet(‘https://raw.githubusercontent.com/shlexware/Rayfield/main/source’))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
 local Window = Rayfield:CreateWindow({
-Name = “Luxen - Emergency Hamburg”,
-LoadingTitle = “Luxen Menu”,
-LoadingSubtitle = “by Emergency Hamburg Team”,
+Name = "Luxen - Emergency Hamburg",
+LoadingTitle = "Luxen Menu",
+LoadingSubtitle = "by Azfasty",
 ConfigurationSaving = {
 Enabled = true,
-FolderName = “Luxen”,
-FileName = “EmergencyHamburg_Config”
+FolderName = "Luxen",
+FileName = "EmergencyHamburg_Config"
 },
 KeySystem = false,
 KeySettings = {
-Title = “Luxen Hub”,
-Subtitle = “Key System”,
-Note = “Pas de clé requise”,
+Title = "Luxen",
+Subtitle = "Key System",
+Note = "Pas de clé requise",
 SaveKey = false,
-Key = “LUXEN2025”
+Key = "LUXEN2025"
 }
 })
 
-– Services
+-- Services
 local Players = game:GetService(“Players”)
 local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService(“RunService”)
 
-– Variables de configuration
+-- Variables de configuration
 local settings = {
 maxSpeed = 1,
 acceleration = 1,
