@@ -47,6 +47,66 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/wea
 local keyEntered = false
 local keyInput = ""
 
+
+
+
+
+
+local gameScripts = {
+    [109983668079237] = "https://raw.githubusercontent.com/Azfastyy/SAB-MENU-LUXEN-ROBLOX/refs/heads/main/main.lua", -- STEAL A BRAINROT
+    [126884695634066] = "https://raw.githubusercontent.com/Azfastyy/GAG-CHEAT-LUXEN/refs/heads/main/main.lua", -- GROW A GARDEN
+    [7711635737]      = "https://raw.githubusercontent.com/Azfastyy/EH-CHEAT-LUXEN/refs/heads/main/main.lua", -- EMERGENCY HAMBURG
+    [79546208627805]  = "https://raw.githubusercontent.com/Azfastyy/99nights-CHEAT-LUXEN/refs/heads/main/main.lua", -- 99 NIGHTS
+    [2753915549]      = "https://raw.githubusercontent.com/Azfastyy/BF-CHEAT-LUXEN/refs/heads/main/main.lua", -- BLOX FRUITS
+}
+
+-- Fonction pour charger le script du jeu correspondant
+local function loadMainMenu()
+    local placeId = game.PlaceId
+    local scriptUrl = gameScripts[placeId]
+
+    if scriptUrl then
+        -- Fermer Orion
+        pcall(function() OrionLib:Destroy() end)
+        
+        -- Charger le script distant
+        local ok, err = pcall(function()
+            local source = game:HttpGet(scriptUrl)
+            local fn = loadstring(source)
+            if type(fn) == "function" then
+                fn()
+            else
+                error("loadstring returned non-function")
+            end
+        end)
+
+        if not ok then
+            -- Notification d'erreur
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "Failed to load the script: "..tostring(err),
+                Image = "rbxassetid://4483345998",
+                Time = 6
+            })
+            warn("Failed to load script:", err)
+        end
+    else
+        -- Jeu non supporté, notification
+        OrionLib:MakeNotification({
+            Name = "Unsupported Game",
+            Content = "This game is not supported!",
+            Image = "rbxassetid://4483345998",
+            Time = 6
+        })
+    end
+end
+
+
+
+
+
+
+
 -- Creation de la fenetre du Key System
 local KeyWindow = OrionLib:MakeWindow({
     Name = "Luxen - Key System",
@@ -115,10 +175,11 @@ KeySection:AddButton({
                 Time = 3
             })
             wait(1)
-            OrionLib:Destroy()
+            
             
             -- Charger le menu principal
             loadMainMenu()
+            OrionLib:Destroy()
         else
             OrionLib:MakeNotification({
                 Name = "Error !",
@@ -216,54 +277,5 @@ OrionLib:Init()
 
 -- FONCTION POUR CHARGER LE MENU PRINCIPAL
 
-
-local gameScripts = {
-    [109983668079237] = "https://raw.githubusercontent.com/Azfastyy/SAB-MENU-LUXEN-ROBLOX/refs/heads/main/main.lua", -- STEAL A BRAINROT
-    [126884695634066] = "https://raw.githubusercontent.com/Azfastyy/GAG-CHEAT-LUXEN/refs/heads/main/main.lua", -- GROW A GARDEN
-    [7711635737]      = "https://raw.githubusercontent.com/Azfastyy/EH-CHEAT-LUXEN/refs/heads/main/main.lua", -- EMERGENCY HAMBURG
-    [79546208627805]  = "https://raw.githubusercontent.com/Azfastyy/99nights-CHEAT-LUXEN/refs/heads/main/main.lua", -- 99 NIGHTS
-    [2753915549]      = "https://raw.githubusercontent.com/Azfastyy/BF-CHEAT-LUXEN/refs/heads/main/main.lua", -- BLOX FRUITS
-}
-
--- Fonction pour charger le script du jeu correspondant
-local function loadMainMenu()
-    local placeId = game.PlaceId
-    local scriptUrl = gameScripts[placeId]
-
-    if scriptUrl then
-        -- Fermer Orion
-        pcall(function() OrionLib:Destroy() end)
-        
-        -- Charger le script distant
-        local ok, err = pcall(function()
-            local source = game:HttpGet(scriptUrl)
-            local fn = loadstring(source)
-            if type(fn) == "function" then
-                fn()
-            else
-                error("loadstring returned non-function")
-            end
-        end)
-
-        if not ok then
-            -- Notification d'erreur
-            OrionLib:MakeNotification({
-                Name = "Error",
-                Content = "Failed to load the script: "..tostring(err),
-                Image = "rbxassetid://4483345998",
-                Time = 6
-            })
-            warn("Failed to load script:", err)
-        end
-    else
-        -- Jeu non supporté, notification
-        OrionLib:MakeNotification({
-            Name = "Unsupported Game",
-            Content = "This game is not supported!",
-            Image = "rbxassetid://4483345998",
-            Time = 6
-        })
-    end
-end
     Rayfield:LoadConfiguration()
 end
