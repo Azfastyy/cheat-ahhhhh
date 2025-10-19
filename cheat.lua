@@ -275,7 +275,3 @@ end)
 
 OrionLib:Init()
 
--- FONCTION POUR CHARGER LE MENU PRINCIPAL
-
-    Rayfield:LoadConfiguration()
-end
