@@ -1,6 +1,3 @@
--- Luxen - Emergency Hamburg Menu
--- Utilise Rayfield Interface Suite
-
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
 local Window = Rayfield:CreateWindow({
@@ -34,12 +31,54 @@ local settings = {
 	autoModify = false
 }
 
--- Onglet Principal - Vehicule
+-- FONCTIONS (definies avant utilisation)
+function isPlayerInVehicle()
+	local character = LocalPlayer.Character
+	if not character then return false end
+	
+	local humanoid = character:FindFirstChild("Humanoid")
+	if not humanoid then return false end
+	
+	return humanoid.SeatPart ~= nil
+end
+
+function modifyCurrentVehicle()
+	local character = LocalPlayer.Character
+	if not character then return false end
+	
+	local humanoid = character:FindFirstChild("Humanoid")
+	if not humanoid or not humanoid.SeatPart then return false end
+	
+	local seat = humanoid.SeatPart
+	local vehicle = seat.Parent
+	
+	if vehicle then
+		for _, part in pairs(vehicle:GetDescendants()) do
+			if part:IsA("VehicleSeat") then
+				part.MaxSpeed = 50 * settings.maxSpeed
+				part.Torque = 1000 * settings.acceleration
+				part.TurnSpeed = 10
+			end
+		end
+		return true
+	end
+	
+	return false
+end
+
+-- Notification de demarrage
+Rayfield:Notify({
+	Title = "Luxen Charge!",
+	Content = "Emergency Hamburg Menu est pret",
+	Duration = 3,
+	Image = 4483362458
+})
+
+-- ONGLET VEHICULE
 local VehicleTab = Window:CreateTab("Vehicule", 4483362458)
 
 local VehicleSection = VehicleTab:CreateSection("Modifications de Vehicule")
 
--- Slider Vitesse Maximum
 local SpeedSlider = VehicleTab:CreateSlider({
 	Name = "Vitesse Maximum",
 	Range = {1, 10},
@@ -51,14 +90,13 @@ local SpeedSlider = VehicleTab:CreateSlider({
 		settings.maxSpeed = Value
 		Rayfield:Notify({
 			Title = "Vitesse Modifiee",
-			Content = "Vitesse maximum: " .. Value .. "x",
+			Content = "Vitesse: " .. Value .. "x",
 			Duration = 2,
 			Image = 4483362458
 		})
 	end,
 })
 
--- Slider Acceleration
 local AccelSlider = VehicleTab:CreateSlider({
 	Name = "Acceleration",
 	Range = {1, 10},
@@ -77,9 +115,6 @@ local AccelSlider = VehicleTab:CreateSlider({
 	end,
 })
 
-VehicleTab:CreateLabel("-------------------------------")
-
--- Toggle Auto-Modification
 local AutoModToggle = VehicleTab:CreateToggle({
 	Name = "Modification Automatique",
 	CurrentValue = false,
@@ -89,7 +124,7 @@ local AutoModToggle = VehicleTab:CreateToggle({
 		if Value then
 			Rayfield:Notify({
 				Title = "Auto-Mod Active",
-				Content = "Les vehicules seront modifies automatiquement",
+				Content = "Modifications automatiques activees",
 				Duration = 3,
 				Image = 4483362458
 			})
@@ -104,59 +139,21 @@ local AutoModToggle = VehicleTab:CreateToggle({
 	end,
 })
 
--- Fonction pour verifier si le joueur est dans un vehicule
-function isPlayerInVehicle()
-	local character = LocalPlayer.Character
-	if not character then return false end
-	
-	local humanoid = character:FindFirstChild("Humanoid")
-	if not humanoid then return false end
-	
-	return humanoid.SeatPart ~= nil
-end
-
--- Fonction pour modifier le vehicule actuel
-function modifyCurrentVehicle()
-	local character = LocalPlayer.Character
-	if not character then return false end
-	
-	local humanoid = character:FindFirstChild("Humanoid")
-	if not humanoid or not humanoid.SeatPart then return false end
-	
-	local seat = humanoid.SeatPart
-	local vehicle = seat.Parent
-	
-	if vehicle then
-		-- Modifier toutes les VehicleSeat du vehicule
-		for _, part in pairs(vehicle:GetDescendants()) do
-			if part:IsA("VehicleSeat") then
-				part.MaxSpeed = 50 * settings.maxSpeed
-				part.Torque = 1000 * settings.acceleration
-				part.TurnSpeed = 10
-			end
-		end
-		return true
-	end
-	
-	return false
-end
-
--- Bouton Appliquer maintenant
 local ApplyButton = VehicleTab:CreateButton({
-	Name = "Appliquer les Modifications",
+	Name = "Appliquer Maintenant",
 	Callback = function()
 		local success = modifyCurrentVehicle()
 		if success then
 			Rayfield:Notify({
 				Title = "Succes!",
-				Content = "Modifications appliquees au vehicule",
+				Content = "Modifications appliquees",
 				Duration = 3,
 				Image = 4483362458
 			})
 		else
 			Rayfield:Notify({
 				Title = "Erreur",
-				Content = "Aucun vehicule trouve! Montez dans un vehicule",
+				Content = "Montez dans un vehicule!",
 				Duration = 4,
 				Image = 4483362458
 			})
@@ -164,11 +161,8 @@ local ApplyButton = VehicleTab:CreateButton({
 	end,
 })
 
-VehicleTab:CreateLabel("-------------------------------")
-
--- Bouton Reset
 local ResetButton = VehicleTab:CreateButton({
-	Name = "Reinitialiser les Valeurs",
+	Name = "Reinitialiser",
 	Callback = function()
 		SpeedSlider:Set(1)
 		AccelSlider:Set(1)
@@ -176,64 +170,37 @@ local ResetButton = VehicleTab:CreateButton({
 		settings.acceleration = 1
 		Rayfield:Notify({
 			Title = "Reinitialise",
-			Content = "Toutes les valeurs ont ete remises a 1x",
+			Content = "Valeurs remises a 1x",
 			Duration = 3,
 			Image = 4483362458
 		})
 	end,
 })
 
--- Paragraphe d'informations
-VehicleTab:CreateParagraph({
+local Paragraph = VehicleTab:CreateParagraph({
 	Title = "Instructions",
-	Content = "1. Ajustez les sliders pour choisir les valeurs\n2. Montez dans un vehicule\n3. Cliquez sur 'Appliquer' ou activez l'auto-modification\n4. Profitez de votre vehicule ameliore!"
+	Content = "1. Ajustez les sliders\n2. Montez dans un vehicule\n3. Cliquez Appliquer ou activez Auto-Mod"
 })
 
--- Onglet Infos
+-- ONGLET INFOS
 local InfoTab = Window:CreateTab("Informations", 4483362458)
 
 InfoTab:CreateSection("A propos de Luxen")
 
 InfoTab:CreateParagraph({
-	Title = "Luxen Menu",
-	Content = "Menu de modification pour Emergency Hamburg\nVersion: 1.0\nCompatible avec tous les executors"
+	Title = "Luxen Menu v1.0",
+	Content = "Menu pour Emergency Hamburg\nPar Azfasty"
 })
-
-InfoTab:CreateLabel("-------------------------------")
-
-InfoTab:CreateParagraph({
-	Title = "Avertissement",
-	Content = "Ce script modifie les proprietes des vehicules. Utilisez-le de maniere responsable. Les modifications ne sont pas permanentes et disparaissent a la respawn."
-})
-
--- Statistiques en temps reel
-local StatsSection = InfoTab:CreateSection("Statistiques Actuelles")
 
 local SpeedLabel = InfoTab:CreateLabel("Vitesse: 1x")
 local AccelLabel = InfoTab:CreateLabel("Acceleration: 1x")
 local StatusLabel = InfoTab:CreateLabel("Statut: En attente")
 
--- Mise a jour des labels en temps reel
-spawn(function()
-	while wait(0.5) do
-		SpeedLabel:Set("Vitesse: " .. settings.maxSpeed .. "x")
-		AccelLabel:Set("Acceleration: " .. settings.acceleration .. "x")
-		
-		local inVehicle = isPlayerInVehicle()
-		if inVehicle then
-			StatusLabel:Set("Statut: Dans un vehicule")
-		else
-			StatusLabel:Set("Statut: Pas dans un vehicule")
-		end
-	end
-end)
-
--- Onglet Parametres
+-- ONGLET PARAMETRES
 local SettingsTab = Window:CreateTab("Parametres", 4483362458)
 
-SettingsTab:CreateSection("Configuration du Menu")
+SettingsTab:CreateSection("Configuration")
 
--- Keybind pour toggle le menu
 local MenuKeybind = SettingsTab:CreateKeybind({
 	Name = "Toggle Menu",
 	CurrentKeybind = "RightShift",
@@ -244,9 +211,6 @@ local MenuKeybind = SettingsTab:CreateKeybind({
 	end,
 })
 
-SettingsTab:CreateLabel("-------------------------------")
-
--- Bouton pour detruire l'interface
 local DestroyButton = SettingsTab:CreateButton({
 	Name = "Fermer Luxen",
 	Callback = function()
@@ -261,27 +225,21 @@ local DestroyButton = SettingsTab:CreateButton({
 	end,
 })
 
--- Fonction pour modifier tous les vehicules proches
-function modifyNearbyVehicles()
-	local character = LocalPlayer.Character
-	if not character then return end
-	
-	local rootPart = character:FindFirstChild("HumanoidRootPart")
-	if not rootPart then return end
-	
-	for _, vehicle in pairs(workspace:GetDescendants()) do
-		if vehicle:IsA("VehicleSeat") then
-			local distance = (vehicle.Position - rootPart.Position).Magnitude
-			if distance < 100 then
-				vehicle.MaxSpeed = 50 * settings.maxSpeed
-				vehicle.Torque = 1000 * settings.acceleration
-				vehicle.TurnSpeed = 10
-			end
+-- Mise a jour des labels
+spawn(function()
+	while wait(1) do
+		SpeedLabel:Set("Vitesse: " .. settings.maxSpeed .. "x")
+		AccelLabel:Set("Acceleration: " .. settings.acceleration .. "x")
+		
+		if isPlayerInVehicle() then
+			StatusLabel:Set("Statut: Dans un vehicule")
+		else
+			StatusLabel:Set("Statut: Pas dans un vehicule")
 		end
 	end
-end
+end)
 
--- Boucle principale de modification automatique
+-- Boucle de modification automatique
 RunService.Heartbeat:Connect(function()
 	if settings.autoModify then
 		pcall(function()
@@ -290,13 +248,4 @@ RunService.Heartbeat:Connect(function()
 	end
 end)
 
--- Notification de demarrage
-Rayfield:Notify({
-	Title = "Luxen Charge!",
-	Content = "Emergency Hamburg Menu est pret a l'emploi",
-	Duration = 5,
-	Image = 4483362458
-})
-
--- Chargement de la configuration
 Rayfield:LoadConfiguration()
