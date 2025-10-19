@@ -42,7 +42,7 @@ local function checkKey(key)
 end
 
 -- Orion Library pour le Key System
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/weakhoes/Roblox-UI-Libs/refs/heads/main/Orion%20Lib/Orion%20Lib%20Source.lua')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/refs/heads/main/source')))()
 
 local keyEntered = false
 local keyInput = ""
