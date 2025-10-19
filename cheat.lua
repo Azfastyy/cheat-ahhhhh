@@ -1,4 +1,4 @@
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/weakhoes/Roblox-UI-Libs/refs/heads/main/Rayfield%20Lib/Rayfield%20Lib%20Source.lua'))()
 
 local Window = Rayfield:CreateWindow({
 	Name = "Rayfield Example Window",
