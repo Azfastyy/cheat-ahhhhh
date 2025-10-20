@@ -99,6 +99,7 @@ local function loadMainMenu(OrionLibRef)
             -- Fermer Orion seulement si le script a bien chargé
             wait(1)
             OrionLibRef:Destroy()
+            OrionLib:Destroy()
         end
     else
         OrionLibRef:MakeNotification({
