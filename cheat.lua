@@ -72,7 +72,7 @@ local function loadMainMenu(OrionLibRef)
         OrionLibRef:MakeNotification({
             Name = "Loading...",
             Content = "Loading your script...",
-            Image = "rbxassetid://4483345998",
+            Image = "rbxassetid://117642158064703", -- ori 4483345998 /  77356950602610
             Time = 2
         })
         
