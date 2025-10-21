@@ -55,7 +55,7 @@ end
 
 -- Scripts par jeu
 local gameScripts = {
-    [109983668079237] = "https://raw.githubusercontent.com/Azfastyy/SAB-MENU-LUXEN-ROBLOX/refs/heads/main/main.lua", -- STEAL A BRAINROT
+    [96342491571673] = "https://raw.githubusercontent.com/Azfastyy/SAB-MENU-LUXEN-ROBLOX/refs/heads/main/main.lua", -- STEAL A BRAINROT
     [126884695634066] = "https://raw.githubusercontent.com/Azfastyy/GAG-CHEAT-LUXEN/refs/heads/main/main.lua", -- GROW A GARDEN
     [7711635737]      = "https://raw.githubusercontent.com/Azfastyy/EH-CHEAT-LUXEN/refs/heads/main/main.lua", -- EMERGENCY HAMBURG
     [79546208627805]  = "https://raw.githubusercontent.com/Azfastyy/99nights-CHEAT-LUXEN/refs/heads/main/main.lua", -- 99 NIGHTS
