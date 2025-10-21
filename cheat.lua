@@ -62,11 +62,9 @@ local gameScripts = {
     [2753915549]      = "https://raw.githubusercontent.com/Azfastyy/BF-CHEAT-LUXEN/refs/heads/main/main.lua", -- BLOX FRUITS
 }
 
--- Fonction pour charger le script du jeu
--- Fonction pour charger le script du jeu
 local function loadMainMenu(OrionLibRef)
-    local placeId = game.PlaceId
-    local scriptUrl = gameScripts[placeId]
+    local gameId = game.GameId
+    local scriptUrl = gameScripts[gameId]
 
     if scriptUrl then
         OrionLibRef:MakeNotification({
@@ -76,33 +74,16 @@ local function loadMainMenu(OrionLibRef)
             Time = 2
         })
         
-        wait(0.5)
+        task.wait(0.5)
         
         local ok, err = pcall(function()
             local source = game:HttpGet(scriptUrl)
-            
-            -- Vérifier que le contenu n'est pas vide
-            if not source or source == "" then
-                error("Empty script source")
-                return
-            end
-            
-            -- Compiler le script
+            if not source or source == "" then error("Empty script source") end
+
             local fn, compileErr = loadstring(source)
+            if not fn then error("Compilation failed: " .. tostring(compileErr)) end
+            if type(fn) ~= "function" then error("loadstring returned non-function") end
             
-            -- Vérifier que la compilation a réussi
-            if not fn then
-                error("Compilation failed: " .. tostring(compileErr))
-                return
-            end
-            
-            -- Vérifier que c'est bien une fonction
-            if type(fn) ~= "function" then
-                error("loadstring returned non-function (type: " .. type(fn) .. ")")
-                return
-            end
-            
-            -- Exécuter le script
             fn()
         end)
 
@@ -115,15 +96,14 @@ local function loadMainMenu(OrionLibRef)
             })
             warn("Failed to load script:", err)
         else
-            -- Fermer Orion seulement si le script a bien chargé
-            wait(1)
+            task.wait(1)
             OrionLibRef:Destroy()
             OrionLib:Destroy()
         end
     else
         OrionLibRef:MakeNotification({
             Name = "Unsupported Game",
-            Content = "This game is not supported! PlaceId: " .. tostring(placeId),
+            Content = "This game is not supported! GameId: " .. tostring(gameId),
             Image = "rbxassetid://4483345998",
             Time = 6
         })
