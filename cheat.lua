@@ -63,6 +63,7 @@ local gameScripts = {
 }
 
 -- Fonction pour charger le script du jeu
+-- Fonction pour charger le script du jeu
 local function loadMainMenu(OrionLibRef)
     local placeId = game.PlaceId
     local scriptUrl = gameScripts[placeId]
@@ -79,18 +80,36 @@ local function loadMainMenu(OrionLibRef)
         
         local ok, err = pcall(function()
             local source = game:HttpGet(scriptUrl)
-            local fn = loadstring(source)
-            if type(fn) == "function" then
-                fn()
-            else
-                error("loadstring returned non-function")
+            
+            -- Vérifier que le contenu n'est pas vide
+            if not source or source == "" then
+                error("Empty script source")
+                return
             end
+            
+            -- Compiler le script
+            local fn, compileErr = loadstring(source)
+            
+            -- Vérifier que la compilation a réussi
+            if not fn then
+                error("Compilation failed: " .. tostring(compileErr))
+                return
+            end
+            
+            -- Vérifier que c'est bien une fonction
+            if type(fn) ~= "function" then
+                error("loadstring returned non-function (type: " .. type(fn) .. ")")
+                return
+            end
+            
+            -- Exécuter le script
+            fn()
         end)
 
         if not ok then
             OrionLibRef:MakeNotification({
                 Name = "Error",
-                Content = "Failed to load the script: "..tostring(err),
+                Content = "Failed to load the script: " .. tostring(err),
                 Image = "rbxassetid://4483345998",
                 Time = 6
             })
