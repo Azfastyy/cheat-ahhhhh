@@ -55,6 +55,7 @@ end
 
 -- Scripts par jeu
 local gameScripts = {
+    -- GameId : URL
     [7709344486] = "https://raw.githubusercontent.com/Azfastyy/SAB-MENU-LUXEN-ROBLOX/refs/heads/main/main.lua", -- STEAL A BRAINROT
     [126884695634066] = "https://raw.githubusercontent.com/Azfastyy/GAG-CHEAT-LUXEN/refs/heads/main/main.lua", -- GROW A GARDEN
     [7711635737]      = "https://raw.githubusercontent.com/Azfastyy/EH-CHEAT-LUXEN/refs/heads/main/main.lua", -- EMERGENCY HAMBURG
@@ -63,14 +64,26 @@ local gameScripts = {
 }
 
 local function loadMainMenu(OrionLibRef)
-    local gameId = game.GameId
-    local scriptUrl = gameScripts[gameId]
+    local gameId = tonumber(game.GameId)
+    local placeId = tonumber(game.PlaceId)
+    local scriptUrl = gameScripts[gameId] or gameScripts[placeId]
+
+    -- DEBUG : afficher les IDs si ça marche pas
+    if not scriptUrl then
+        warn("Unsupported game!")
+        warn("GameId:", gameId, "PlaceId:", placeId)
+        warn("Known IDs:", table.concat((function()
+            local t = {}
+            for k,_ in pairs(gameScripts) do table.insert(t,k) end
+            return t
+        end)(), ", "))
+    end
 
     if scriptUrl then
         OrionLibRef:MakeNotification({
             Name = "Loading...",
             Content = "Loading your script...",
-            Image = "rbxassetid://4483345998", -- ori 4483345998 /  77356950602610
+            Image = "rbxassetid://4483345998",
             Time = 2
         })
         
@@ -103,13 +116,12 @@ local function loadMainMenu(OrionLibRef)
     else
         OrionLibRef:MakeNotification({
             Name = "Unsupported Game",
-            Content = "This game is not supported! GameId: " .. tostring(gameId),
+            Content = "This game is not supported! GameId: " .. tostring(gameId) .. " PlaceId: " .. tostring(placeId),
             Image = "rbxassetid://4483345998",
             Time = 6
         })
     end
 end
-
 -- Orion Library
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/weakhoes/Roblox-UI-Libs/refs/heads/main/Orion%20Lib/Orion%20Lib%20Source.lua')))()
 
